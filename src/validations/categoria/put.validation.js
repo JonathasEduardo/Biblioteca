@@ -1,6 +1,6 @@
 const { z } = require("zod");
 
-const createCategorySchema = z.object({
+const putCategorySchema = z.object({
   nome: z
     .string()
     .refine((nome) => nome.length > 3, {
@@ -14,5 +14,5 @@ const createCategorySchema = z.object({
 });
 
 module.exports = {
-  createCategorySchema,
+  putCategorySchema,
 };

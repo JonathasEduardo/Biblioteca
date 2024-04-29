@@ -3,6 +3,9 @@ const categoriaService = require("../service/categoriaService");
 const {
   createCategorySchema,
 } = require("../validations/categoria/create.validation");
+const {
+  putCategorySchema,
+} = require("../validations/categoria/put.validation");
 
 class CategoriaController {
   async novaCategoria(request, response) {
@@ -43,26 +46,30 @@ class CategoriaController {
 
   async atualizarCategoria(request, response) {
     try {
+      let categoryVerified = putCategorySchema.parse(request.body);
       const { id } = request.params;
-      const { nome, descricao } = request.body;
-      const category = await categoriaService.update({ id, nome, descricao });
+      const { nome, descricao } = categoryVerified;
+      categoryVerified = await categoriaService.update({ id, nome, descricao });
+      console.log(" id, nome, descricao ", id, nome, descricao);
       return response
         .status(200)
-        .json({ message: `Atualizado com sucesso ${category}` });
+        .json({ message: `Atualizado com sucesso ${categoryVerified}` });
     } catch (error) {
-      return response.status(404).json({ message: "Sem listagem" });
+      return response.status(404).json({ message: "O nome da categoria precisa de no mínimo 3 letras e a descrição 10" });
     }
   }
 
   async removerCategoria(request, response) {
     try {
       const id = parseInt(request.params.id);
-      
-      const category = await categoriaService.delete(id)
-      return response.status(200).json({message:`Deletado com sucesso ${category}`})
+
+      const category = await categoriaService.delete(id);
+      return response
+        .status(200)
+        .json({ message: `Deletado com sucesso ${category}` });
     } catch (error) {
       console.log("error ", error);
-      return response.status(404).json({message:"Erro ao deletar"});
+      return response.status(404).json({ message: "Erro ao deletar" });
     }
   }
 }

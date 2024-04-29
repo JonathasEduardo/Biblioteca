@@ -1,6 +1,6 @@
 const { z } = require("zod");
 
-const createBookSchema = z.object({
+const putBookSchema = z.object({
   nome: z
     .string()
     .refine(
@@ -36,5 +36,5 @@ const createBookSchema = z.object({
 });
 
 module.exports = {
-  createBookSchema,
+  putBookSchema,
 };

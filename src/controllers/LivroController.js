@@ -1,6 +1,7 @@
 const database = require("../database/connection");
 const livroService = require("../service/livroService");
 const { createBookSchema } = require("../validations/livro/create.validation.");
+const { putBookSchema } = require("../validations/livro/put.validation");
 
 class LivroController {
   async novoLivro(request, response) {
@@ -41,8 +42,9 @@ class LivroController {
 
   async atualizarLivro(request, response) {
     try {
+      let bookVerified = putBookSchema.parse(request.body);
       const id = parseInt(request.params.id);
-      const { nome, autor, tamanho, idcategoria } = request.body;
+      const { nome, autor, tamanho, idcategoria } = bookVerified;
       const book = await livroService.update(
         id,
         nome,
